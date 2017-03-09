@@ -1,0 +1,6 @@
+we have not had any sure ideas about the 2 client connecting directly, so we build a socket voice chat first 
+
+client includes:
+- record: a thread that record sound directly
+- play: a thread that play the sound get from the orther client indirectly (actualy from the server)
+- client_gui: a graphic user interface

@@ -8,11 +8,22 @@ package client;
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
-import java
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.TargetDataLine;
+import javax.sound.sampled.LineUnavailableException;
 /**
  *
  * @author Vinh
  */
 public class record extends Thread{
+    private ObjectOutputStream out;
+    private TargetDataLine sound;
     
+    public record(ObjectOutputStream out) throws LineUnavailableException{
+        this.out=out;
+        AudioFormat format = new AudioFormat(11025f, 8, 1, true, true);
+        
+    }
 }

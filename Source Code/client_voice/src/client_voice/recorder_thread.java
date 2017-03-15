@@ -24,6 +24,7 @@ public class recorder_thread extends Thread{
                 audio_in.read(byte_buff, 0, byte_buff.length);
                 DatagramPacket data = new DatagramPacket(byte_buff, byte_buff.length, server_ip, server_port);
                 dout.send(data);
+                
             } catch (IOException ex) {       
             }
         }

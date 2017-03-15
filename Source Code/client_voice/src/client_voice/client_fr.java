@@ -13,6 +13,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.TargetDataLine;
 
 public class client_fr extends javax.swing.JFrame {
@@ -28,6 +29,7 @@ public class client_fr extends javax.swing.JFrame {
         return new AudioFormat(sampleRate, sampleSizeInbits, channel, signed, bigEndian);
     }
     TargetDataLine audio_in;
+    SourceDataLine audio_out;
     public client_fr() {
         initComponents();
     }
@@ -54,7 +56,7 @@ public class client_fr extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Truyền data");
 
-        btn_start.setText("Start");
+        btn_start.setText("Gọi");
         btn_start.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_startActionPerformed(evt);
@@ -85,21 +87,21 @@ public class client_fr extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(136, 136, 136)
                         .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(91, 91, 91)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btn_start)
-                                .addGap(53, 53, 53)
-                                .addComponent(btn_stop))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(18, 18, 18)
-                                .addComponent(tf_ip, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(26, 26, 26)
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(tf_port, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addGap(128, 128, 128)
+                            .addComponent(btn_start)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btn_stop))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addGap(91, 91, 91)
+                            .addComponent(jLabel3)
+                            .addGap(18, 18, 18)
+                            .addComponent(tf_ip, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(26, 26, 26)
+                            .addComponent(jLabel2)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(tf_port, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(108, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -113,11 +115,11 @@ public class client_fr extends javax.swing.JFrame {
                     .addComponent(tf_port, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_start)
                     .addComponent(btn_stop))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addGap(58, 58, 58))
         );
 
         pack();
@@ -171,19 +173,31 @@ public class client_fr extends javax.swing.JFrame {
 
     public void init_audio(){
         try {
+            //capture audio
             AudioFormat format = getaudioformat();
             DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
             audio_in = (TargetDataLine) AudioSystem.getLine(info);
             audio_in.open(format);
-            audio_in.start();           
+            audio_in.start();    //start thread       
             recorder_thread r = new recorder_thread();
+            //playback audio from server
+            DataLine.Info info_out = new DataLine.Info(TargetDataLine.class, format);
+            audio_out = (SourceDataLine) AudioSystem.getLine(info_out);
+            audio_out.open(format);
+            audio_out.start();
+            player_thread p =new player_thread();
             InetAddress inet = InetAddress.getByName(tf_ip.getText());
             r.audio_in = audio_in;
             r.dout = new DatagramSocket();
             r.server_ip = inet;
             r.server_port = Integer.parseInt(tf_port.getText());
+            p.audio_out = audio_out;
+            p.din = new DatagramSocket();
+            p.server_ip = inet;
+            p.server_port = Integer.parseInt(tf_port.getText());
             Client_voice.calling = true;
             r.start();
+            p.start();
             btn_start.setEnabled(false);
             btn_stop.setEnabled(true);
         } catch (LineUnavailableException | UnknownHostException | SocketException ex) {

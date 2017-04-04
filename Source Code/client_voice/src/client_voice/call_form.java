@@ -11,7 +11,7 @@ import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.TargetDataLine;
 import javax.swing.JButton;
 
-public class calling_form extends javax.swing.JFrame {
+public class call_form extends javax.swing.JFrame {
 
     //public int port_server = 8888;
     //public String add_server = "127.0.0.1";
@@ -25,7 +25,7 @@ public class calling_form extends javax.swing.JFrame {
     }
     TargetDataLine audio_in;
     SourceDataLine audio_out;
-    public calling_form() {
+    public call_form() {
         initComponents();
        
     }
@@ -120,9 +120,9 @@ public class calling_form extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    private static final Logger LOG = Logger.getLogger(calling_form.class.getName());
+    private static final Logger LOG = Logger.getLogger(call_form.class.getName());
 
-    public calling_form(JButton btn_start) {
+    public call_form(JButton btn_start) {
         this.btn_start = btn_start;
     }
 
@@ -153,14 +153,18 @@ public class calling_form extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(calling_form.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(call_form.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(calling_form.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(call_form.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(calling_form.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(call_form.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(calling_form.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(call_form.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -169,7 +173,7 @@ public class calling_form extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new calling_form().setVisible(true);
+                new call_form().setVisible(true);
             }
         });
     }

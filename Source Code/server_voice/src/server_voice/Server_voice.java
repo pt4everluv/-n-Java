@@ -5,11 +5,38 @@
  */
 package server_voice;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Server_voice {
 
     public static boolean calling = false;
-    public static void main(String[] args) {
-        server_fr fr = new server_fr();
-        fr.setVisible(true);
+    private int sensionNo;
+    ArrayList<String> users;
+    ArrayList clientOuputStream;
+    public class severStart implements Runnable  {
+        
+       
+        @Override
+        public void run() {
+            users = new ArrayList();  
+            clientOuputStream = new ArrayList();
+
+            try {
+                ServerSocket serverSock = new ServerSocket(2222);
+                while(true){
+                    Socket clientSock = serverSock.accept();
+                    
+                }
+            } catch (IOException ex) {}
+                
+
+        }
+        
     }   
+    
 }

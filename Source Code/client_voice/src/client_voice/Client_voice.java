@@ -5,10 +5,16 @@
  */
 package client_voice;
 
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+
+
 public class Client_voice {
 
     public static boolean calling = false;
     public static boolean invite = false;
+    public static InetAddress toID;
     public static void main(String[] args) {
         client_form fr = new client_form();
         fr.setVisible(true);

@@ -5,8 +5,15 @@
  */
 package client_voice;
 
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.logging.Logger;
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.TargetDataLine;
 import javax.swing.JButton;
@@ -27,7 +34,7 @@ public class call_form extends javax.swing.JFrame {
     SourceDataLine audio_out;
     public call_form() {
         initComponents();
-       
+        init_audio();
     }
 
     /**
@@ -40,33 +47,21 @@ public class call_form extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        btn_start = new javax.swing.JButton();
         btn_stop = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        tf_ip = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(51, 51, 255));
         setForeground(new java.awt.Color(102, 102, 255));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel1.setText("Đang gọi");
-
-        btn_start.setBackground(new java.awt.Color(0, 153, 0));
-        btn_start.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
-        btn_start.setForeground(new java.awt.Color(255, 255, 255));
-        btn_start.setText("Gọi");
-        btn_start.setInheritsPopupMenu(true);
-        btn_start.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_startActionPerformed(evt);
-            }
-        });
+        jLabel1.setText("Đang trò chuyện");
 
         btn_stop.setBackground(new java.awt.Color(204, 0, 0));
         btn_stop.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
         btn_stop.setForeground(new java.awt.Color(255, 255, 255));
-        btn_stop.setText("Hủy");
+        btn_stop.setText("Dừng");
         btn_stop.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_stopActionPerformed(evt);
@@ -76,30 +71,28 @@ public class call_form extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
         jLabel3.setText("Gọi tới");
 
-        jTextField1.setBackground(new java.awt.Color(204, 204, 255));
-        jTextField1.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
-        jTextField1.setEnabled(false);
+        tf_ip.setBackground(new java.awt.Color(204, 204, 255));
+        tf_ip.setFont(new java.awt.Font("sansserif", 1, 14)); // NOI18N
+        tf_ip.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel3)
-                        .addGap(26, 26, 26)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(66, 66, 66)
-                        .addComponent(btn_start, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btn_stop, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addGap(26, 26, 26)
+                .addComponent(tf_ip, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(46, 46, 46))
             .addGroup(layout.createSequentialGroup()
-                .addGap(110, 110, 110)
-                .addComponent(jLabel1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(110, 110, 110)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(125, 125, 125)
+                        .addComponent(btn_stop, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -110,26 +103,16 @@ public class call_form extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_stop, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_start, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36))
+                    .addComponent(tf_ip, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
+                .addComponent(btn_stop, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(39, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private static final Logger LOG = Logger.getLogger(call_form.class.getName());
 
-    public call_form(JButton btn_start) {
-        this.btn_start = btn_start;
-    }
-
-    private void btn_startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_startActionPerformed
-        init_audio();
-        
-    }//GEN-LAST:event_btn_startActionPerformed
 
     private void btn_stopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_stopActionPerformed
         Client_voice.calling = false;
@@ -179,23 +162,41 @@ public class call_form extends javax.swing.JFrame {
     }
 
     public void init_audio(){
-        
+        try {
+            //capture audio
+            AudioFormat format = getaudioformat();
+            DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
+            audio_in = (TargetDataLine) AudioSystem.getLine(info);
+            audio_in.open(format);
+            audio_in.start();    //start thread       
+            recorder_thread r = new recorder_thread();
+            //playback audio from server
+            DataLine.Info info_out = new DataLine.Info(TargetDataLine.class, format);
+            audio_out = (SourceDataLine) AudioSystem.getLine(info_out);
+            audio_out.open(format);
+            audio_out.start();
+            player_thread p =new player_thread();
+            InetAddress inet = InetAddress.getByName(tf_ip.getText());
+            r.audio_in = audio_in;
+            r.dout = new DatagramSocket();
+            r.server_ip = inet;
+            r.server_port = port;
+            p.audio_out = audio_out;
+            p.din = new DatagramSocket();
+            p.server_ip = inet;
+            p.server_port = Integer.parseInt(port);
+            Client_voice.calling = true;
+            r.start();
+            p.start();
+            btn_stop.setEnabled(true);
+        } catch (LineUnavailableException | UnknownHostException | SocketException ex) {}
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn_start;
     private javax.swing.JButton btn_stop;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField tf_ip;
     // End of variables declaration//GEN-END:variables
-
-    private void setEditable(boolean b) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private void setEnable(boolean b) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     
 }

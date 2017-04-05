@@ -6,25 +6,13 @@
 package client_voice;
 
 import java.util.logging.Logger;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.SourceDataLine;
-import javax.sound.sampled.TargetDataLine;
 import javax.swing.JButton;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
 
 public class client_form extends javax.swing.JFrame {
-
-    //public int port_server = 8888;
-    //public String add_server = "127.0.0.1";
-    public static AudioFormat getaudioformat(){
-        float sampleRate = 8000.0F;     //number of samples played or recorded per second
-        int sampleSizeInbits = 16;      //bits in each sample
-        int channel = 2;        //strereo
-        boolean signed = true;
-        boolean bigEndian = false;
-        return new AudioFormat(sampleRate, sampleSizeInbits, channel, signed, bigEndian);
-    }
-    TargetDataLine audio_in;
-    SourceDataLine audio_out;
+    
     public client_form() {
         initComponents();
        
@@ -76,6 +64,11 @@ public class client_form extends javax.swing.JFrame {
         jLabel3.setText("Gọi tới");
 
         tf_ip.setText("127.0.0.1");
+        tf_ip.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tf_ipActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -93,16 +86,16 @@ public class client_form extends javax.swing.JFrame {
                     .addComponent(tf_ip))
                 .addGap(46, 46, 46))
             .addGroup(layout.createSequentialGroup()
-                .addGap(122, 122, 122)
+                .addGap(123, 123, 123)
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
+                .addGap(23, 23, 23)
                 .addComponent(jLabel1)
-                .addGap(27, 27, 27)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tf_ip, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
@@ -128,9 +121,18 @@ public class client_form extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_startActionPerformed
 
     private void btn_stopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_stopActionPerformed
+        try {
+            Client_voice.toID = InetAddress.getByName(tf_ip.getText());
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(client_form.class.getName()).log(Level.SEVERE, null, ex);
+        }
         Client_voice.invite = false;
         System.exit(0);
     }//GEN-LAST:event_btn_stopActionPerformed
+
+    private void tf_ipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_ipActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tf_ipActionPerformed
 
     /**
      * @param args the command line arguments

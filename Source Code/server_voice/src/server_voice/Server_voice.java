@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Server_voice {
 
@@ -65,7 +67,7 @@ public class Server_voice {
             addToClient(cl);
         } 
     }
-    public void removeClient(){
+    public void removeOldClient(){
         ArrayList<client_connect> toRemove = new ArrayList<client_connect>(); //create a list of dead connections
                     for (client_connect cc : client) {
                         if (!cc.isAlive()) {                //dead connection                     
@@ -80,10 +82,12 @@ public class Server_voice {
         @Override
         public void run(){
             while(true){
-                removeClient();
-             
+                removeOldClient();          
                 if(!broadCastQueue.isEmpty()){
-                    Thread.sleep(10);                       
+                    try {                       
+                        Thread.sleep(10);
+                    } catch (InterruptedException ex) {}
+                    continue;
                } else {                              //broadcast mess
                     Message m = broadCastQueue.get(0);
                     for (client_connect cc : client) { 

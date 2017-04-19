@@ -1,0 +1,9 @@
+
+SERVER:
+- GUI; graphic UI (just for demo)
+ - Server: main class. Create socket ,wait for any clients to connect. Create Broadcast Queue that 
+broadcast messages to all clients
+
+ -ClientConnection: manage each client which connect to server. Read message form client. Add mess 
+to broadcast queue. Recieve mess from server to add that mess to send queue and finaly send to client (
+delete if too old)

@@ -1,9 +1,18 @@
 
 SERVER:
-- GUI; graphic UI (just for demo)
- - Server: main class. Create socket ,wait for any clients to connect. Create Broadcast Queue that 
-broadcast messages to all clients
+- GUI; graphic UI 
+ - Server: main class. t?o socket k?t n?i, các queue noi luu tr? audio data nh?n du?c t? m?i client d? 
+send t?i các client còn l?i
+ 
 
- -ClientConnection: manage each client which connect to server. Read message form client. Add mess 
-to broadcast queue. Recieve mess from server to add that mess to send queue and finaly send to client (
-delete if too old)
+
+CLIENT:
+- GUI: graphic UI
+- Client: kh?i t?o I/O stream g?i và nh?n data t?/d?n server 
+   + g?i d? li?u lên server thông qua ObjectOutputStream b?ng kh?i t?o thread MicThread
+   + nh?n d? li?u t? server thông qua ObjectInputStream dua và queue, t?o thread PlayThread
+d? phát ra loa
+
+
+- MicThread: thread thu âm thanh, nén, t?o các packetg và g?i lên server
+- PlayThread:  thread nh?n data t? server, gi?i nén và phát ra loa

@@ -1,11 +1,8 @@
 
 import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
 
 /*
@@ -13,63 +10,77 @@ import java.util.ArrayList;
  * the editor.
  */
 /**
- * opens socket, creates a
- * ClientConnection for client. creates a BroadcastThread that passes
- * messages from the broadcastQueue to all client
-
+ * tao socket, tao client connection cho tung client
+ *  tao BroadcastThread gui mess cho cac client 
+ * gui mess cho cac client
  */
-public class Server {
-    
+
+public class Server implements Runnable{
+    private int sessionNo = 0;
     private ArrayList<Message> broadCastQueue = new ArrayList<Message>();    
     private ArrayList<ClientConnection> clients = new ArrayList<ClientConnection>();
-    private int port;
+    private ArrayList clientOut;
     
-    public void addToBroadcastQueue(Message m) { //add a message to the broadcast queue. this method is used by all ClientConnection instances
-        try {
-            broadCastQueue.add(m);
-        } catch (Throwable t) {
-            //mutex error, try again
-            Utils.sleep(1);
-            addToBroadcastQueue(m);
-        }
-    }
+    
     private ServerSocket s;
-    
+    /*
     public Server(int port) throws Exception{
-        this.port = port;
-        
+          
         try {
-            s = new ServerSocket(port);         //init socket
-            Log.add("Port " + port + ": server started");
+            s = new ServerSocket(2222);         //init socket
+            sessionNo++;
+            Log.add("server started ...");
         } catch (IOException ex) {
-            Log.add("Server error " + ex + "(port " + port + ")");
-            throw new Exception("Error "+ex);
+            Log.add("Server error ");
         }
         new BroadcastThread().start();           //start Broadcast thread 
-        while(true) { //accept all incoming connection
+        while(true) {                            //accept incoming connect
             try {
                 Socket c = s.accept();
+                
                 ClientConnection cc = new ClientConnection(this, c); //create a ClientConnection thread
                 cc.start();
-                addToClients(cc);
-                Log.add("new client " + c.getInetAddress() + ":" + c.getPort() + " on port " + port);
+                clients.add(cc);
+                Log.add("Got connection fr " + c.getInetAddress() + ":" 
+                        + c.getPort() );
+            } catch (IOException ex) {
+            }
+        }
+       
+    }
+   */
+    public void addToBroadcastQueue(Message m) { //them cac mess vao hang doi de gui den cac client
+        try {
+            broadCastQueue.add(m);
+        } catch (Throwable t) {}
+    }
+
+    @Override
+    public void run() {
+        try {
+            s = new ServerSocket(GUI.port);         //init socket         
+           
+            Log.add("Khởi động server ở port: " +GUI.port + "\n");
+        } catch (IOException ex) {
+            //Log.add("Server error ");
+        }
+        new BroadcastThread().start();           // Broadcast thread 
+        while(true) {                            //accept incoming connect
+            try {
+                Socket c = s.accept();
+                
+                ClientConnection cc = new ClientConnection(this, c); //tao ClientConnection thread
+                cc.start();
+                clients.add(cc);
+                Log.add("Connect từ " + c.getInetAddress() + ":" 
+                        + c.getPort() );
             } catch (IOException ex) {
             }
         }
     }
 
-    private void addToClients(ClientConnection cc) {
-        try {
-            clients.add(cc); //add the new connection to the list of connections
-        } catch (Throwable t) {
-            //mutex error, try again
-            Utils.sleep(1);
-            addToClients(cc);
-        }
-    }
-
     /**
-     * broadcasts messages to each ClientConnection, and removes dead ones
+     * gui cac mess toi cac client, xoa cac mess cu trong queue
      */
     private class BroadcastThread extends Thread {
         
@@ -80,30 +91,26 @@ public class Server {
         public void run() {
             while(true) {
                 try {
+                    //xoa cac client ko hoat dong
                     ArrayList<ClientConnection> toRemove = new ArrayList<ClientConnection>(); //create a list of dead connections
                     for (ClientConnection cc : clients) {
-                        if (!cc.isAlive()) {            //remove dead connection
-                            Log.add("dead connection: " + cc.getInetAddress() + ":" + cc.getPort() + " on port " + port);
+                        if (!cc.isAlive()) {            //remove
                             toRemove.add(cc);
                         }
                     }
-                    clients.removeAll(toRemove); //delete all dead connections
-                    if (broadCastQueue.isEmpty()) {             //no data to send
-                        Utils.sleep(10);                       
-                        continue;
-                    } else { //we got something to broadcast
-                        Message m = broadCastQueue.get(0);
-                        for (ClientConnection cc : clients) { //broadcast to all clients on port
-                            if (cc.getChId() != m.getChId()) {
-                                cc.addToQueue(m);
-                            }
+                    clients.removeAll(toRemove);                 //kill all 
+                    //gui cac mess vao toSend queue
+                    Message m = broadCastQueue.get(0);
+                    for (ClientConnection cc : clients) { //gui mess dem tat ca cac client connect cung port
+                        if (cc.getChId() != m.getChId()) {
+                            cc.addToQueue(m);
                         }
-                        broadCastQueue.remove(m); //remove it from the broadcast queue
                     }
-                } catch (Throwable t) {
-                    //mutex error, try again
-                }
+                        broadCastQueue.remove(m); //xoa khoi queue
+                    
+                } catch (Throwable t) {}
             }
         }
     }
 }
+

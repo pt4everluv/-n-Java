@@ -2,8 +2,6 @@
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-//import java.util.logging.Level;
-//import java.util.logging.Logger;
 import java.util.zip.GZIPOutputStream;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
@@ -16,7 +14,7 @@ import javax.sound.sampled.TargetDataLine;
  * and open the template in the editor.
  */
 
-/*This thread use device's micro to record audio */
+/* thread use device's micro to record audio */
 public class MicThread extends Thread {
 
     public static double amplification = 1.0;
@@ -54,10 +52,11 @@ public class MicThread extends Thread {
                     tot /= buff.length; 
                     //create and send packet
                     Message m = null;
-                    if (tot == 0) {//send empty packet
+                    if (tot == 0) 
+                    {                                    //send empty packet
                         m = new Message(-1, -1, new SoundPacket(null));
-                    } else { //send data
-                        //compress by gzip to get a small size
+                    } else {                            //send data
+                        //compress 
                         ByteArrayOutputStream out = new ByteArrayOutputStream();
                         GZIPOutputStream go = new GZIPOutputStream(out);
                         go.write(buff);
@@ -74,9 +73,7 @@ public class MicThread extends Thread {
             } else {
                 try {
                     Thread.sleep(10);
-                } catch (InterruptedException ex) {
-                    
-                }
+                } catch (InterruptedException ex) {}
             }
         }
     }

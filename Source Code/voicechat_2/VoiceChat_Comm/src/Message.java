@@ -1,4 +1,3 @@
-
 import java.io.Serializable;
 
 /*
@@ -7,12 +6,13 @@ import java.io.Serializable;
  */
 
 /**
- * any type object
+ * object chua data va giao thuc gui len server
  */
-public class Message implements Serializable{
-    private long chId; //-1:  client to server, 1 creeated by server
-    private long timestamp; //-1: client to server, timeStamp of the moment when the server receives the message
-    private long ttl=2000; //2 seconds time to live
+public class Message implements Serializable    //sap xep trinh tu luu tru cua mess
+{
+    private long chId;                  //-1:  client -> server, 1 creeated by server
+    private long timestamp;             //-1: client -> server, timeStamp danh dau moc thoi gian server nhan duoc
+    private long ttl=2000;              //time to live 2sec
     private Object data; 
 
     

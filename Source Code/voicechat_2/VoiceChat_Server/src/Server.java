@@ -1,6 +1,6 @@
 
 import java.io.IOException;
-import java.io.PrintWriter;
+
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -16,19 +16,26 @@ import java.util.ArrayList;
  */
 
 public class Server implements Runnable{
-    private int sessionNo = 0;
+   
     private ArrayList<Message> broadCastQueue = new ArrayList<Message>();    
     private ArrayList<ClientConnection> clients = new ArrayList<ClientConnection>();
-    private ArrayList clientOut;
+    private ServerSocket s=null;
+    public Server(){
+        try {
+             s = new ServerSocket(GUI.port);         //init socket         
+           
+            Log.add("Khởi động server ở port: " +GUI.port + "\n");
+        } catch (IOException ex) {
+            //Log.add("Server error ");
+        }
+    }
     
-    
-    private ServerSocket s;
     /*
     public Server(int port) throws Exception{
           
         try {
             s = new ServerSocket(2222);         //init socket
-            sessionNo++;
+          
             Log.add("server started ...");
         } catch (IOException ex) {
             Log.add("Server error ");
@@ -57,13 +64,7 @@ public class Server implements Runnable{
 
     @Override
     public void run() {
-        try {
-            s = new ServerSocket(GUI.port);         //init socket         
-           
-            Log.add("Khởi động server ở port: " +GUI.port + "\n");
-        } catch (IOException ex) {
-            //Log.add("Server error ");
-        }
+        
         new BroadcastThread().start();           // Broadcast thread 
         while(true) {                            //accept incoming connect
             try {
@@ -74,8 +75,8 @@ public class Server implements Runnable{
                 clients.add(cc);
                 Log.add("Connect từ " + c.getInetAddress() + ":" 
                         + c.getPort() );
-            } catch (IOException ex) {
-            }
+                
+            } catch (IOException ex) {}
         }
     }
 

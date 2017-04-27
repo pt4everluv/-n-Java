@@ -1,8 +1,5 @@
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.TargetDataLine;
+
 import javax.swing.JOptionPane;
 
 /*
@@ -70,7 +67,6 @@ public class GUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        ip = new javax.swing.JTextField();
         b_call = new javax.swing.JButton();
         port = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -80,11 +76,12 @@ public class GUI extends javax.swing.JFrame {
         b_end = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setAutoRequestFocus(false);
         setResizable(false);
 
-        ip.setText("127.0.0.1");
-        ip.setEnabled(false);
-
+        b_call.setBackground(new java.awt.Color(51, 255, 0));
+        b_call.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        b_call.setForeground(new java.awt.Color(255, 255, 255));
         b_call.setText("Call");
         b_call.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -92,12 +89,13 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
-        port.setText("2222");
+        port.setText("2223");
 
-        jLabel1.setText("To server ");
+        jLabel1.setText("Port");
 
         jLabel4.setText("Mic volume");
 
+        micVol.setForeground(new java.awt.Color(51, 51, 255));
         micVol.setMaximum(300);
         micVol.setMinimum(50);
         micVol.setValue(100);
@@ -107,9 +105,12 @@ public class GUI extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel2.setText("Call");
+        jLabel2.setFont(new java.awt.Font("Air Millhouse  Italic", 1, 24)); // NOI18N
+        jLabel2.setText("CALL");
 
+        b_end.setBackground(new java.awt.Color(255, 0, 0));
+        b_end.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        b_end.setForeground(new java.awt.Color(255, 255, 255));
         b_end.setText("End");
         b_end.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -127,54 +128,43 @@ public class GUI extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(b_call)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(b_end))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(micVol, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(47, 47, 47)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(ip, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(port, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(micVol, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addComponent(b_call)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(b_end)
-                        .addGap(63, 63, 63))))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(123, 123, 123)
-                .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel2)
+                            .addComponent(port, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(32, 32, 32)
                 .addComponent(jLabel2)
-                .addGap(24, 24, 24)
+                .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(ip, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(port, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(micVol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(b_call)
-                            .addComponent(b_end)))
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(31, 31, 31))
+                    .addComponent(micVol, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(b_call)
+                    .addComponent(b_end))
+                .addGap(22, 22, 22))
         );
 
         pack();
@@ -182,23 +172,23 @@ public class GUI extends javax.swing.JFrame {
 
     private void b_callActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_callActionPerformed
         try {
-            new Client(ip.getText(), Integer.parseInt(port.getText())).start(); //connect to specified server at specified port
+            new Client("103.1.237.137", Integer.parseInt(port.getText())).start(); //connect to specified server at specified port
         } catch (Exception ex) { //connection failed
-            JOptionPane.showMessageDialog(rootPane, ex,"Error",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, ex,"Error: ",JOptionPane.ERROR_MESSAGE);
             return;
         }
         //connected, disable buttons
 
-        ip.setEnabled(false);
+       
         port.setEnabled(false);
         b_call.setEnabled(false);
 
         jLabel1.setEnabled(false);
 
-        micVol.setVisible(false);
-        jLabel4.setVisible(false);
+       // micVol.setVisible(false);
+        //jLabel4.setVisible(false);
 
-        setSize(getWidth(),getHeight()-75);
+       //setSize(getWidth(),getHeight()-75);
     }//GEN-LAST:event_b_callActionPerformed
 
     private void micVolStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_micVolStateChanged
@@ -258,7 +248,6 @@ public class GUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton b_call;
     private javax.swing.JButton b_end;
-    private javax.swing.JTextField ip;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;

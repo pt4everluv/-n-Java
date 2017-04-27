@@ -18,7 +18,7 @@ import javax.sound.sampled.SourceDataLine;
 public class PlayThread extends Thread {
 
     private long chId;                        
-    private ArrayList<Message> queue = new ArrayList<Message>(); //queue chua data dung de play
+    private ArrayList<Message> data = new ArrayList<Message>(); //data chua data dung de play
     private int lastSoundPacketLen = SoundPacket.defaultDataLenght;
     private long lastPacketTime = System.nanoTime();
 
@@ -45,8 +45,8 @@ public class PlayThread extends Thread {
         return chId;
     }
 
-    public void addToQueue(Message m) { //them mes vao play queue
-        queue.add(m);
+    public void addQueue(Message m) { //them mes vao play data
+        data.add(m);
     }
     private SourceDataLine speaker = null; //speaker
 
@@ -60,14 +60,14 @@ public class PlayThread extends Thread {
             speaker.open(af);
             speaker.start();
             //ready
-            while(true) { //doi data moi tu queue va phat ra loa
-                if (queue.isEmpty()) {          //nothing
+            while(true) { //doi data moi tu data va phat ra loa
+                if (data.isEmpty()) {          //nothing
                     Utils.sleep(10);
                     //continue;
                 } else {                    //co du lieu
                     lastPacketTime = System.nanoTime();
-                    Message in = queue.get(0);
-                    queue.remove(in);
+                    Message in = data.get(0);
+                    data.remove(in);
                     if (in.getData() instanceof SoundPacket) { //du lieu phu hop
                         SoundPacket m = (SoundPacket) (in.getData());
                         if (m.getData() == null) {

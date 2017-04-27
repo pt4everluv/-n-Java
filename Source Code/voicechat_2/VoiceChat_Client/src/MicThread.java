@@ -33,11 +33,11 @@ public class MicThread extends Thread {
 
     @Override
     public void run() {
-        for (;;) {
-            if (mic.available() >= SoundPacket.defaultDataLenght) { //enough data to send
+        while(true) {
+            if (mic.available() >= SoundPacket.defaultDataLenght) { //co du lieu
                 byte[] buff = new byte[SoundPacket.defaultDataLenght];
                 while (mic.available() >= SoundPacket.defaultDataLenght) { //flush old data from mic to reduce lag, and read most recent data
-                    mic.read(buff, 0, buff.length); //read from microphone
+                    mic.read(buff, 0, buff.length); //thu am
                 }
                 try {
                     
@@ -45,15 +45,16 @@ public class MicThread extends Thread {
                     long tot = 0;
                     
                     for (int i = 0; i < buff.length; i++) {
+                        //amplication dung de khuech dai am luong nho vao Mic Volume
                         buff[i] *= amplification;
                         tot += Math.abs(buff[i]);
                     }
                     tot *= 2.5;
                     tot /= buff.length; 
-                    //create and send packet
+                    //nen va gui du lieu
                     Message m = null;
                     if (tot == 0) 
-                    {                                    //send empty packet
+                    {                                  
                         m = new Message(-1, -1, new SoundPacket(null));
                     } else {                            //send data
                         //compress 

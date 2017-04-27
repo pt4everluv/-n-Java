@@ -45,15 +45,15 @@ public class Client extends Thread {
                         }
                     }
                     if (sendTo != null) {
-                        sendTo.addToQueue(in);
+                        sendTo.addQueue(in);
                     } else { //mo PlayThread thread
                         PlayThread ch = new PlayThread(in.getChId());
-                        ch.addToQueue(in);
+                        ch.addQueue(in);
                         ch.start();
                         chs.add(ch);
                     }
                 }else{ //delete thread
-                    ArrayList<PlayThread> kill=new ArrayList<PlayThread>();
+                    ArrayList<PlayThread> kill=new ArrayList<PlayThread>(); //kill các thread 
                     for(PlayThread c:chs) 
                         if(c.canKill()) kill.add(c);
                     for(PlayThread c:kill)

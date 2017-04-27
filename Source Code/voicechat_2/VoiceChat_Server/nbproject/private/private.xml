@@ -7,6 +7,9 @@
             <file>file:/C:/Users/dosse/Documents/NetBeansProjects/VoiceChat_Server/src/GUI.java</file>
             <file>file:/C:/Users/dosse/Documents/NetBeansProjects/VoiceChat_Server/src/Server.java</file>
         </group>
-        <group name="voice_master"/>
+        <group name="voice_master">
+            <file>file:/D:/OTHER/Drive/Java/workspace/voicechat/VoiceChat_Server/src/GUI.java</file>
+            <file>file:/D:/OTHER/Drive/Java/workspace/voicechat/VoiceChat_Server/src/Server.java</file>
+        </group>
     </open-files>
 </project-private>

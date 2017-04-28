@@ -16,7 +16,8 @@ import java.util.ArrayList;
  */
 
 public class Server implements Runnable{
-   
+    //private int sessionNo;
+    //private int userNo;
     private ArrayList<Message> broadCastQueue = new ArrayList<Message>();    
     private ArrayList<ClientConnection> clients = new ArrayList<ClientConnection>();
     private ServerSocket s=null;

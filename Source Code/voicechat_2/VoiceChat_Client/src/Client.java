@@ -23,7 +23,8 @@ public class Client extends Thread {
 
     @Override
     public void run() {
-        try {
+        try 
+        {
             ObjectInputStream fromServer = new ObjectInputStream(s.getInputStream());  //create object streams with the server
             ObjectOutputStream toServer = new ObjectOutputStream(s.getOutputStream());
             try {
@@ -33,18 +34,22 @@ public class Client extends Thread {
             } catch (Exception e) { 
                 System.out.println("mic unavailable " + e);
             }
-            while(true) {           //cho data tu server
+            while(true) //cho data tu server
+            {           
                 
-                if (s.getInputStream().available() > 0) { //co du lieu tu server
-                    Message in = (Message) (fromServer.readObject()); //read message
+                if (s.getInputStream().available() > 0)   //co du lieu tu server
+                {
+                    Message in = (Message) (fromServer.readObject()); //nhan data tu server
                     
                     PlayThread sendTo = null; 
-                    for (PlayThread ch : chs) {
+                    for (PlayThread ch : chs) 
+                    {
                         if (ch.getChId() == in.getChId()) {
                             sendTo = ch;
                         }
                     }
-                    if (sendTo != null) {
+                    if (sendTo != null) 
+                    {
                         sendTo.addQueue(in);
                     } else { //mo PlayThread thread
                         PlayThread ch = new PlayThread(in.getChId());
@@ -53,10 +58,10 @@ public class Client extends Thread {
                         chs.add(ch);
                     }
                 }else{ //delete thread
-                    ArrayList<PlayThread> kill=new ArrayList<PlayThread>(); //kill các thread 
+                    ArrayList<PlayThread> delete =new ArrayList<PlayThread>(); //remove các thread 
                     for(PlayThread c:chs) 
-                        if(c.canKill()) kill.add(c);
-                    for(PlayThread c:kill)
+                        if(c.canKill()) delete.add(c);
+                    for(PlayThread c:delete)
                     {
                         c.closeAndKill(); chs.remove(c);
                     }

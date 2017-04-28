@@ -19,7 +19,7 @@ public class PlayThread extends Thread {
 
     private long chId;                        
     private ArrayList<Message> data = new ArrayList<Message>(); //data chua data dung de play
-    private int lastSoundPacketLen = SoundPacket.defaultDataLenght;
+    private int lastPacketLenght = SoundPacket.defaultDataLenght;
     private long lastPacketTime = System.nanoTime();
 
     public boolean canKill() { //reutrn true neu thoi gian tu luc nhan packet cuoi qua lau (5secs)
@@ -70,9 +70,11 @@ public class PlayThread extends Thread {
                     data.remove(in);
                     if (in.getData() instanceof SoundPacket) { //du lieu phu hop
                         SoundPacket m = (SoundPacket) (in.getData());
-                        if (m.getData() == null) {
-                            byte[] noise = new byte[lastSoundPacketLen];
-                            for (int i = 0; i < noise.length; i++) {
+                        if (m.getData() == null) 
+                        {
+                            byte[] noise = new byte[lastPacketLenght];
+                            for (int i = 0; i < noise.length; i++) 
+                            {
                                 noise[i] = (byte) ((Math.random() * 3) - 1);
                             }
                             speaker.write(noise, 0, noise.length);
@@ -91,7 +93,7 @@ public class PlayThread extends Thread {
                             //play decompressed data
                             byte[] toPlay=read.toByteArray();
                             speaker.write(toPlay, 0, toPlay.length);
-                            lastSoundPacketLen = m.getData().length;
+                            lastPacketLenght = m.getData().length;
                         }
                     } else { //du lieu ko phu hop
                         continue; 
@@ -99,7 +101,7 @@ public class PlayThread extends Thread {
                 }
             }
         } catch (Exception e) { //deviece err, cancel
-            System.out.println("receiverThread " + chId + " error: " + e.toString());
+            System.out.println(" " + chId + " error: " + e.toString());
             if (speaker != null) {
                 speaker.close();
             }
